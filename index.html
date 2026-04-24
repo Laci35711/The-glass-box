@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Glass Box | Luminous Social Experiences</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --bg-ivory: #F9F6F2;
+            --forest-green: #1B3022;
+            --stone-500: #78716c;
+            --stone-600: #57534e;
+            --stone-200: #e7e5e4;
+            --stone-300: #d6d3d1;
+            --muted-gold: #C5A059;
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-ivory);
+            color: var(--forest-green);
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, .serif {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 300;
+        }
+
+        /* --- Theme Layout Patterns --- */
+        .page-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* --- Navigation --- */
+        nav {
+            height: 6rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 4rem;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(249, 246, 242, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(27, 48, 34, 0.05);
+        }
+
+        .nav-left, .nav-right {
+            width: 33.333%;
+            display: flex;
+            gap: 2rem;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            font-weight: 600;
+        }
+
+        .nav-right {
+            justify-content: flex-end;
+        }
+
+        .nav-center {
+            width: 33.333%;
+            text-align: center;
+        }
+
+        .nav-center h1 {
+            font-size: 1.5rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            font-style: italic;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--forest-green);
+            transition: opacity 0.3s;
+        }
+
+        nav a:hover {
+            opacity: 0.6;
+        }
+
+        .btn-outline {
+            border: 1px solid var(--forest-green);
+            padding: 0.4rem 1.2rem;
+            transition: var(--transition);
+        }
+
+        .btn-outline:hover {
+            background: var(--forest-green);
+            color: white;
+            opacity: 1 !important;
+        }
+
+        /* --- Hero --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            padding: 10rem 4rem 4rem;
+            gap: 2rem;
+        }
+
+        .hero-text {
+            width: 50%;
+            padding-right: 3rem;
+            padding-top: 4rem;
+        }
+
+        .hero-tagline {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.4em;
+            margin-bottom: 1.5rem;
+            display: block;
+            font-weight: 700;
+            color: var(--stone-500);
+        }
+
+        .hero h2 {
+            font-size: clamp(4rem, 7vw, 5.5rem);
+            line-height: 1;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            color: var(--stone-600);
+            max-width: 440px;
+            margin-bottom: 2.5rem;
+        }
+
+        .btn-primary {
+            background: var(--forest-green);
+            color: var(--bg-ivory);
+            padding: 1.25rem 2.5rem;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.3em;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(27, 48, 34, 0.15);
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(27, 48, 34, 0.25);
+        }
+
+        /* --- Hero Gallery Pattern --- */
+        .hero-gallery {
+            width: 50%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            height: 480px;
+        }
+
+        .gallery-item {
+            height: 100%;
+            border-top-left-radius: 9999px;
+            border-top-right-radius: 9999px;
+            border: 1px solid var(--stone-200);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            position: relative;
+        }
+
+        .gallery-item:nth-child(1) { background: linear-gradient(to bottom, #E6E1D9, #D4CEC3); }
+        .gallery-item:nth-child(2) { 
+            background: linear-gradient(to bottom, var(--forest-green), #0D1811); 
+            transform: translateY(-30px);
+            border-color: rgba(255,255,255,0.1);
+            color: var(--bg-ivory);
+        }
+        .gallery-item:nth-child(3) { background: linear-gradient(to bottom, #E6E1D9, #D4CEC3); }
+
+        .gallery-inner {
+            width: 100%;
+            height: 50%;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-top-left-radius: 9999px;
+            border-top-right-radius: 9999px;
+            opacity: 0.8;
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Ethereal Florals - High Quality Event Image */
+        .gallery-item:nth-child(1) .gallery-inner {
+            background-image: url("https://images.unsplash.com/photo-1523438885200-e635be2c3ed1?q=80&w=1974&auto=format&fit=crop");
+            background-color: rgba(27, 48, 34, 0.05);
+            background-size: cover;
+            background-position: center;
+            opacity: 1;
+        }
+
+        /* Sophisticated Galas - Elegant Setup */
+        .gallery-item:nth-child(2) .gallery-inner {
+            border-color: rgba(255,255,255,0.2);
+            height: 75%;
+            background-image: url("https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop");
+            background-size: cover;
+            background-position: center;
+            opacity: 1;
+        }
+
+        /* Private Celebrations - Warm Ambiance */
+        .gallery-item:nth-child(3) .gallery-inner {
+            background-image: url("https://images.unsplash.com/photo-1541140134513-85a161dc4a00?q=80&w=2070&auto=format&fit=crop");
+            background-size: cover;
+            background-position: center;
+            box-shadow: inset 0 0 50px rgba(197, 160, 89, 0.3);
+            opacity: 1;
+        }
+        .gallery-item:nth-child(3) .gallery-inner::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(from 180deg at 50% 50%, transparent 0deg, rgba(255,255,255,0.1) 180deg, transparent 360deg);
+            animation: rotateGlow 15s linear infinite;
+        }
+        @keyframes rotateGlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .gallery-label {
+            margin-top: 1rem;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            opacity: 0.8;
+        }
+
+        .gallery-item:nth-child(2) .gallery-label {
+            transform: none;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            writing-mode: vertical-rl;
+        }
+
+        /* --- Feature Section --- */
+        .features {
+            padding: 8rem 4rem;
+        }
+
+        .features-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .features-header .sub {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.4em;
+            color: var(--stone-500);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .features-header h2 {
+            font-size: 3.5rem;
+        }
+
+        .feature-grid {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid white;
+            padding: 2.5rem 1.5rem;
+            border-radius: 12px;
+            width: 250px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .feature-icon {
+            width: 2rem;
+            height: 2rem;
+            background: rgba(27, 48, 34, 0.05);
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-card span {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        /* --- Proposal Section --- */
+        .proposal-section {
+            padding: 8rem 4rem;
+            background: #F3F0EC;
+            border-top: 1px solid var(--stone-200);
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        .proposal-container {
+            max-width: 640px;
+            width: 100%;
+        }
+
+        .proposal-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .proposal-header .sub {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.4em;
+            color: var(--stone-500);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .proposal-header h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .proposal-header p {
+            color: var(--stone-600);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .proposal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .form-group label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-weight: 700;
+            color: var(--stone-400);
+        }
+
+        .form-group input, .form-group textarea {
+            background: var(--bg-ivory);
+            border: 1px solid var(--stone-300);
+            padding: 1.2rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            color: var(--forest-green);
+            outline-color: var(--forest-green);
+            transition: var(--transition);
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--forest-green);
+            background: white;
+        }
+
+        /* --- Footer Interface Bar --- */
+        footer.interface-bar {
+            height: 12rem;
+            background: rgba(255,255,255,0.4);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid var(--stone-200);
+            display: flex;
+            align-items: center;
+            padding: 0 4rem;
+        }
+
+        .countdown-block {
+            width: 25%;
+            border-right: 1px solid var(--stone-200);
+            padding-right: 2rem;
+        }
+
+        .block-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-weight: 700;
+            color: var(--stone-400);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .countdown-flex {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .countdown-unit {
+            text-align: center;
+        }
+
+        .countdown-unit span:first-child {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.75rem;
+            display: block;
+            line-height: 1;
+        }
+
+        .countdown-unit span:last-child {
+            font-size: 8px;
+            text-transform: uppercase;
+            opacity: 0.5;
+        }
+
+        .quick-inquiry {
+            width: 35%;
+            padding-left: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .inquiry-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .inquiry-group input {
+            background: var(--bg-ivory);
+            border: 1px solid var(--stone-300);
+            padding: 0.6rem 1rem;
+            font-size: 11px;
+            flex: 1;
+            outline: none;
+        }
+
+        .inquiry-group button {
+            background: var(--forest-green);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            font-size: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+        }
+
+        /* --- Decorative Overlays --- */
+        .frame-overlay {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            right: 2rem;
+            bottom: 2rem;
+            border: 1px solid rgba(27, 48, 34, 0.05);
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .botanical-svg {
+            position: absolute;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--forest-green);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 4px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2000;
+        }
+
+        /* --- Experience Modal --- */
+        .experience-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(249, 246, 242, 0.98);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            padding: 4rem;
+            overflow-y: auto;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .experience-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--stone-200);
+        }
+
+        .modal-header h2 {
+            font-size: 2.5rem;
+            font-style: italic;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--forest-green);
+        }
+
+        .experience-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding-bottom: 4rem;
+        }
+
+        .experience-item {
+            aspect-ratio: 4/5;
+            overflow: hidden;
+            border-radius: 4px;
+            position: relative;
+            background: var(--stone-200);
+        }
+
+        .experience-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .experience-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .experience-item .caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+            color: white;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .experience-item:hover .caption {
+            opacity: 1;
+        }
+
+        @media (max-width: 1024px) {
+            nav { padding: 0 2rem; }
+            .hero { flex-direction: column; padding-top: 8rem; }
+            .hero-text, .hero-gallery { width: 100%; }
+            .hero-gallery { height: 320px; }
+            footer.interface-bar { flex-direction: column; height: auto; padding: 3rem 2rem; gap: 2rem; }
+            .countdown-block, .quick-inquiry { width: 100%; border: none; padding: 0; }
+            .feature-grid { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="frame-overlay"></div>
+
+    <!-- Decorative Florals -->
+    <svg class="botanical-svg" style="top: -50px; left: -50px;" width="300" height="300" viewBox="0 0 100 100" fill="none">
+        <path d="M50 10C50 10 45 30 30 40C15 50 10 70 10 70C10 70 30 65 40 50C50 35 70 30 70 30C70 30 65 50 50 60C35 70 30 90 30 90" stroke="#1B3022" stroke-width="0.5" />
+        <circle cx="50" cy="10" r="2" fill="#1B3022" />
+    </svg>
+
+    <nav>
+        <div class="nav-left">
+            <a href="javascript:void(0)" id="experienceBtn">Experience</a>
+            <a href="#customization">Customization</a>
+        </div>
+        <div class="nav-center">
+            <h1>The Glass Box</h1>
+        </div>
+        <div class="nav-right">
+            <a href="#gallery">Gallery</a>
+            <a href="#contact" class="btn-outline">Inquire</a>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="hero-text">
+                <span class="hero-tagline">The Art of Celebration</span>
+                <h2>The Glass Box<br>Experience</h2>
+                <p>Elevating every milestone—from intimate galas to grand celebrations—with hand-crafted glass centerpieces designed as modern heirlooms.</p>
+                <button class="btn-primary" onclick="window.location.href='#contact'">Book a Consultation</button>
+            </div>
+            <div class="hero-gallery">
+                <div class="gallery-item">
+                    <div class="gallery-inner"></div>
+                    <span class="gallery-label">Ethereal Florals</span>
+                </div>
+                <div class="gallery-item">
+                    <span class="gallery-label">Custom Engraving</span>
+                    <div class="gallery-inner"></div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-inner"></div>
+                    <span class="gallery-label">Luminous Glow</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="customization" class="features">
+            <div class="features-header">
+                <span class="sub">Bespoke Design</span>
+                <h2>Curated for Every Event</h2>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <div style="width: 4px; height: 4px; background: var(--forest-green); border-radius: 50%;"></div>
+                    </div>
+                    <span>Ambient Lighting</span>
+                    <p style="font-size: 10px; margin-top: 0.5rem; opacity: 0.7;">Warm LED reflections for evening galas and intimate dinners.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L15 8H21L16 13L18 20L12 16L6 20L8 13L3 8H9L12 2Z" /></svg>
+                    </div>
+                    <span>Artisanal Florals</span>
+                    <p style="font-size: 10px; margin-top: 0.5rem; opacity: 0.7;">Professionally curated botanicals suspended in crystal clarity.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <div style="width: 8px; height: 1px; background: var(--forest-green);"></div>
+                    </div>
+                    <span>Bespoke Etching</span>
+                    <p style="font-size: 10px; margin-top: 0.5rem; opacity: 0.7;">Precision laser engraving for monograms, dates, or custom logos.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="proposal-section">
+            <div class="proposal-container">
+                <div class="proposal-header">
+                    <span class="sub">Collaborative Milestones</span>
+                    <h2>Request a Proposal</h2>
+                    <p>Share the details of your upcoming social event. Our design team will synthesize your ideas into a bespoke luminous concept.</p>
+                </div>
+                <form id="proposalForm" class="proposal-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Event Type</label>
+                            <input type="text" name="event_type" placeholder="e.g. Corporate Gala, Anniversary" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Event Date</label>
+                            <input type="date" name="event_date" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Vision & Ideas</label>
+                        <textarea name="vision" rows="5" placeholder="Tell us about the theme, floral preferences, or specific lighting mood you wish to evoke..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Email</label>
+                        <input type="email" name="email" placeholder="alex@milestone.com" required>
+                    </div>
+                    <button type="submit" class="btn-primary" style="margin-top: 1rem;">Generate Bespoke Proposal</button>
+                </form>
+            </div>
+        </section>
+
+        <footer style="padding: 4rem; text-align: center; border-top: 1px solid var(--stone-200); opacity: 0.5; font-size: 0.8rem;">
+            <p>&copy; 2026 The Glass Box Experiences. All rights reserved.</p>
+        </footer>
+
+        <div id="toast">Inquiry Sent. Thank You.</div>
+
+        <!-- Experience Overlay Modal -->
+        <div id="experienceModal" class="experience-modal">
+            <div class="modal-header">
+                <h2>Moments Captured</h2>
+                <button class="close-modal" id="closeModal">Close Experience</button>
+            </div>
+            <div class="experience-gallery">
+                <div class="experience-item">
+                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop" alt="People taking photos at event">
+                    <div class="caption">Luminous Wedding Memories</div>
+                </div>
+                <div class="experience-item">
+                    <img src="https://images.unsplash.com/photo-1549417229-aa67d3263c09?q=80&w=2070&auto=format&fit=crop" alt="Happy friends having fun">
+                    <div class="caption">Artisanal Anniversary Smiles</div>
+                </div>
+                <div class="experience-item">
+                    <img src="https://images.unsplash.com/photo-1516600164263-c7b456da02fe?q=80&w=2069&auto=format&fit=crop" alt="Corporate event photography">
+                    <div class="caption">Corporate Gala Vibrance</div>
+                </div>
+                <div class="experience-item">
+                    <img src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=2070&auto=format&fit=crop" alt="Celebration capture">
+                    <div class="caption">Private Garden Parties</div>
+                </div>
+                <div class="experience-item">
+                    <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=2069&auto=format&fit=crop" alt="People laughing and taking photos">
+                    <div class="caption">Evening Gala Highlights</div>
+                </div>
+                <div class="experience-item">
+                    <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2070&auto=format&fit=crop" alt="Wedding centerpieces and guests">
+                    <div class="caption">Unforgettable Social Gatherings</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Form Logic for Proposal
+        const proposalForm = document.getElementById('proposalForm');
+        const toast = document.getElementById('toast');
+
+        if (proposalForm) {
+            proposalForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(proposalForm);
+                const data = Object.fromEntries(formData.entries());
+                
+                // LocalStorage persistence
+                const inquiries = JSON.parse(localStorage.getItem('glass_box_proposals') || '[]');
+                inquiries.push({ ...data, timestamp: new Date().toISOString() });
+                localStorage.setItem('glass_box_proposals', JSON.stringify(inquiries));
+
+                // Feedback
+                toast.classList.add('show');
+                proposalForm.reset();
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            });
+        }
+
+        // Experience Modal Logic
+        const experienceBtn = document.getElementById('experienceBtn');
+        const experienceModal = document.getElementById('experienceModal');
+        const closeModal = document.getElementById('closeModal');
+
+        if (experienceBtn && experienceModal && closeModal) {
+            experienceBtn.addEventListener('click', () => {
+                experienceModal.style.display = 'flex';
+                // Trigger reflow for transition
+                void experienceModal.offsetWidth;
+                experienceModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+
+            closeModal.addEventListener('click', () => {
+                experienceModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                setTimeout(() => {
+                    experienceModal.style.display = 'none';
+                }, 500);
+            });
+        }
+    </script>
+</body>
+</html>
+
+
